@@ -7,9 +7,21 @@ const roles = Player.schema.path('role').enumValues;
 
 // INDEX Player
 router.get('/players', (req, res) => {
-    Player.find().lean()
+    let query = Object.assign({}, req.query);
+
+    query.rlte = query.rlte || 5000
+    query.rgte = query.rgte || 0
+
+    let filter = {
+        rank: {
+            $lte: query.rlte,
+            $gte: query.rgte
+        }
+    }
+
+    Player.find(filter).lean()
     .then(players => {
-        res.render('players-index', { players: players });
+        res.render('players-index', { players: players, query: query });
     })
     .catch(console.error);
 });
