@@ -3,3 +3,6 @@ node_js:
   - "node"
 services:
   - mongodb
+cache:
+  directories:
+    - node_modules
